@@ -6,7 +6,7 @@
 /*   By: ymehlil <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 21:28:03 by ymehlil           #+#    #+#             */
-/*   Updated: 2023/02/08 23:43:24 by ymehlil          ###   ########.fr       */
+/*   Updated: 2023/02/08 23:58:30 by ymehlil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,14 +52,20 @@ void   ft_execute(char *av, char **env)
     char	*path;
 	char	**cmd;
     int i;
-
-    path = take_path(env);
-    cmd = ft_split(av, ' ');
-    path = find_path(cmd[0], path);
-    if (!path)
+    if (access(av, X_OK) == 0)
     {
-        ft_free_all(cmd);
-        ft_error();
+        path = av;
+    }
+    else
+    {
+        path = take_path(env);
+        cmd = ft_split(av, ' ');
+        path = find_path(cmd[0], path);
+        if (!path)
+        {
+            ft_free_all(cmd);
+            ft_error();
+        }
     }
     i = execve(path, cmd, env);
     if (i == -1)
