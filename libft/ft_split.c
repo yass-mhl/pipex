@@ -6,7 +6,7 @@
 /*   By: ymehlil <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/09 10:57:59 by ymehlil           #+#    #+#             */
-/*   Updated: 2022/11/09 12:30:50 by ymehlil          ###   ########.fr       */
+/*   Updated: 2023/02/08 22:15:41 by ymehlil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static size_t	nb_word(const char *s, char c)
 	return (word);
 }
 
-char	**ft_error(char **split, int word)
+static char	**ft_error(char **split, int word)
 {
 	while (word >= 0)
 	{

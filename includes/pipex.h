@@ -6,7 +6,7 @@
 /*   By: ymehlil <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 12:45:19 by ymehlil           #+#    #+#             */
-/*   Updated: 2023/02/08 17:44:55 by ymehlil          ###   ########.fr       */
+/*   Updated: 2023/02/08 22:13:43 by ymehlil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,13 @@
 // 	char cmd_paths;
 // }
 
-int	main();
+int     main(int ac, char **av, char **env);
+
+void    ft_error(void);
+char	*find_path(char *cmd, char *env);
+char	*take_path(char **env);
+void    ft_free_all(char **tab);
+void   ft_execute(char *av, char **env);
+void	parent_process(int *tube, char **av, char **env);
 
 #endif

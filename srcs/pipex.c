@@ -6,78 +6,73 @@
 /*   By: ymehlil <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 12:48:46 by ymehlil           #+#    #+#             */
-/*   Updated: 2023/02/08 21:09:23 by ymehlil          ###   ########.fr       */
+/*   Updated: 2023/02/08 23:44:16 by ymehlil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/pipex.h"
 
-char	*take_path(char **env)
+void child_process(int *tube, char **av, char **env)
 {
-	while (env && ft_strncmp("PATH", *env, 4))
-		env++;
-	return (*env);
+	int	infile;
+	
+	infile = open(av[1], O_RDONLY);
+	if (infile == -1)
+	{
+		write(1, "1", 1);
+		ft_error();
+	}	
+	dup2(tube[1], STDOUT_FILENO);
+	dup2(infile, STDIN_FILENO);
+	close(tube[0]);
+	ft_execute(av[2], env);	
 }
 
-char	*find_path(char *cmd, char *env)
+void	parent_process(int *tube, char **av, char **env)
 {
-	int		i;
-	char	**path;
-	char	*path_cmd;
-	char	*slash;
-	
-	i = 0;
-	path = ft_split(env, ':');
-	while (path && path[i])
-	{	
-		slash = ft_strjoin1(path[i], "/");
-		path_cmd = ft_strjoin1(slash, cmd);
-		if (access(path_cmd, X_OK) == 0)
-			return (path_cmd);
-		i++;
-		free(path_cmd);
+	int		outfile;
+
+	outfile = open(av[4], O_WRONLY | O_CREAT | O_TRUNC);
+	if (outfile == -1)
+	{
+		write(1, "1", 1);
+		ft_error();
 	}
-	return (NULL);
-	
-}
-
-void child_process(int f1, char *cmd)
-{
-	dup2()
-}
-
-void	pipex(int f1, int f2, char *cmd1, char *cmd2)
-{
-	int	end[2];
-	pid_t	pid;
-	
-	pipe(end);
-	pid = fork();
-	if (parent < 0)
-		return(perror("Fork : "));
-	if (!parent)
-		child_process(f1, cmd1);
-	else
-		parent_process(f2, cmd2);
+		
+	dup2(tube[0], STDIN_FILENO);
+	dup2(outfile, STDOUT_FILENO);
+	close(tube[1]);
+	ft_execute(av[3], env);
 }
 
 int	main(int ac, char **av, char **env)
 {
-	char	*path;
-	char	**cmd;
-	int		f1;
-	int		f2;
+	// int		f1;
+	// int		f2;
+	int		tube[2];
+	pid_t	pid;
 	
 	if (ac != 5)
 		return (ft_printf("Error\n: not the right amount of args"), 0);
-	path = take_path(env);
+	if (pipe(tube) == -1)
+		ft_error();
+	pid = fork();
+	if (pid == -1)
+		ft_error();
+	if (!pid)
+		child_process(tube, av, env);
+	waitpid(pid, NULL, 0);
+	parent_process(tube, av, env);
+	// path = take_path(env);
 	// AV[1] PROVISOIRE !!! A CHANGER
-	cmd = ft_split(av[2], ' ');
-	path = find_path(cmd[0], path);
-	if (!path)
-		return (ft_printf("Error\nnot path found"), 0);
-	f1 = open(av[1], O_RDONLY);
-	f2 = open(av[ac - 1], O_TRUNC | O_RDONLY | O_CREAT);
+	// cmd = ft_split(av[2], ' ');
+	// path = find_path(cmd[0], path);
+	// if (!path)
+	// 	return (ft_printf("Error\nnot path found"), 0);
+	
+	
+	// f1 = open(av[1], O_RDONLY);
+	// f2 = open(av[ac - 1], O_TRUNC | O_RDONLY | O_CREAT);
 
-	execve(path, cmd, env);
+	// execve(path, cmd, env);
 }
