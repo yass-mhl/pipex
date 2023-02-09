@@ -6,7 +6,7 @@
 /*   By: ymehlil <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 12:48:46 by ymehlil           #+#    #+#             */
-/*   Updated: 2023/02/09 21:32:13 by ymehlil          ###   ########.fr       */
+/*   Updated: 2023/02/09 22:54:50 by ymehlil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ int	main(int ac, char **av, char **env)
 	if (!pid1)
 		child_process(tube, av, env);
 	pid2 = fork();
+	waitpid(pid1, NULL, 0);
 	if (pid2 == 0)
 		parent_process(tube, av, env);
-	waitpid(pid1, NULL, 0);
 }
