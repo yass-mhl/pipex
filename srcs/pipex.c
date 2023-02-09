@@ -6,7 +6,7 @@
 /*   By: ymehlil <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 12:48:46 by ymehlil           #+#    #+#             */
-/*   Updated: 2023/02/08 23:44:16 by ymehlil          ###   ########.fr       */
+/*   Updated: 2023/02/09 21:32:13 by ymehlil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,32 +47,21 @@ void	parent_process(int *tube, char **av, char **env)
 
 int	main(int ac, char **av, char **env)
 {
-	// int		f1;
-	// int		f2;
 	int		tube[2];
-	pid_t	pid;
+	pid_t	pid1;
+	pid_t	pid2;
 	
 	if (ac != 5)
 		return (ft_printf("Error\n: not the right amount of args"), 0);
 	if (pipe(tube) == -1)
 		ft_error();
-	pid = fork();
-	if (pid == -1)
+	pid1 = fork();
+	if (pid1 == -1)
 		ft_error();
-	if (!pid)
+	if (!pid1)
 		child_process(tube, av, env);
-	waitpid(pid, NULL, 0);
-	parent_process(tube, av, env);
-	// path = take_path(env);
-	// AV[1] PROVISOIRE !!! A CHANGER
-	// cmd = ft_split(av[2], ' ');
-	// path = find_path(cmd[0], path);
-	// if (!path)
-	// 	return (ft_printf("Error\nnot path found"), 0);
-	
-	
-	// f1 = open(av[1], O_RDONLY);
-	// f2 = open(av[ac - 1], O_TRUNC | O_RDONLY | O_CREAT);
-
-	// execve(path, cmd, env);
+	pid2 = fork();
+	if (pid2 == 0)
+		parent_process(tube, av, env);
+	waitpid(pid1, NULL, 0);
 }

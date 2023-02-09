@@ -6,7 +6,7 @@
 /*   By: ymehlil <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 12:45:19 by ymehlil           #+#    #+#             */
-/*   Updated: 2023/02/08 22:13:43 by ymehlil          ###   ########.fr       */
+/*   Updated: 2023/02/09 21:02:51 by ymehlil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include "../libft/libft.h"
 # include "../ft_printf/ft_printf.h"
 # include <fcntl.h>
+#include <sys/wait.h>
 
 // typedef struct s_pipex
 // {
