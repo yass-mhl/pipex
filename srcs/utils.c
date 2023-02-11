@@ -6,16 +6,16 @@
 /*   By: ymehlil <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 21:28:03 by ymehlil           #+#    #+#             */
-/*   Updated: 2023/02/08 23:58:30 by ymehlil          ###   ########.fr       */
+/*   Updated: 2023/02/11 15:36:24 by ymehlil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/pipex.h"
 
-void    ft_error(void)
+void	ft_error(void)
 {
-    perror("Error");
-    exit(EXIT_FAILURE);
+	perror("Error");
+	exit(EXIT_FAILURE);
 }
 
 char	*take_path(char **env)
@@ -31,47 +31,50 @@ char	*find_path(char *cmd, char *env)
 	char	**path;
 	char	*path_cmd;
 	char	*slash;
-	
+
 	i = 0;
 	path = ft_split(env, ':');
 	while (path && path[i])
-	{	
+	{
 		slash = ft_strjoin1(path[i], "/");
 		path_cmd = ft_strjoin1(slash, cmd);
 		if (access(path_cmd, X_OK) == 0)
 			return (path_cmd);
 		i++;
 		free(path_cmd);
+		// free(slash);
 	}
 	return (NULL);
-	
 }
 
-void   ft_execute(char *av, char **env)
+void	ft_execute(char *av, char **env)
 {
-    char	*path;
+	char	*path;
 	char	**cmd;
-    int i;
-    if (access(av, X_OK) == 0)
-    {
-        path = av;
-    }
-    else
-    {
-        path = take_path(env);
-        cmd = ft_split(av, ' ');
-        path = find_path(cmd[0], path);
-        if (!path)
-        {
-            ft_free_all(cmd);
-            ft_error();
-        }
-    }
-    i = execve(path, cmd, env);
-    if (i == -1)
-    {
-        ft_free_all(cmd);
-        free(path);
-        ft_error();
-    }
+	int		i;
+
+	path = take_path(env);
+	cmd = ft_split(av, ' ');
+	if (access(cmd[0], X_OK) == 0)
+	{
+		if (execve(cmd[0], cmd, env) == -1)
+		{
+			ft_error();
+		}
+		return ;
+	}
+	else
+		path = find_path(cmd[0], path);
+	if (!path)
+	{
+		ft_free_all(cmd);
+		ft_error();
+	}
+	i = execve(path, cmd, env);
+	if (i == -1)
+	{
+		free(path);
+		ft_free_all(cmd);
+		ft_error();
+	}
 }
