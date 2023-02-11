@@ -6,7 +6,7 @@
 /*   By: ymehlil <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 12:48:46 by ymehlil           #+#    #+#             */
-/*   Updated: 2023/02/11 15:46:01 by ymehlil          ###   ########.fr       */
+/*   Updated: 2023/02/11 19:03:16 by ymehlil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,30 +14,24 @@
 
 void	child_process(int *tube, char **av, char **env, t_pipex *data)
 {
-	int	infile;
-
-	infile = open(av[1], O_RDONLY);
-	if (infile == -1)
+	if (data->infile == -1)
 		ft_error();
-	data->f1 = dup2(tube[1], STDOUT_FILENO);
-	data->f2 = dup2(infile, STDIN_FILENO);
+	dup2(tube[1], STDOUT_FILENO);
+	dup2(data->infile, STDIN_FILENO);
 	close(tube[0]);
 	close(tube[1]);
-	ft_execute(av[2], env);
+	ft_execute(av[2], env, tube, data);
 }
 
 void	parent_process(int *tube, char **av, char **env, t_pipex *data)
 {
-	int	outfile;
-
-	outfile = open(av[4], O_WRONLY | O_CREAT | O_TRUNC);
-	if (outfile == -1)
+	if (data->outfile == -1)
 		ft_error();
-	data->f1 = dup2(tube[0], STDIN_FILENO);
-	data->f2 = dup2(outfile, STDOUT_FILENO);
+	dup2(tube[0], STDIN_FILENO);
+	dup2(data->outfile, STDOUT_FILENO);
 	close(tube[0]);
 	close(tube[1]);
-	ft_execute(av[3], env);
+	ft_execute(av[3], env, tube, data);
 }
 
 int	main(int ac, char **av, char **env)
@@ -51,6 +45,9 @@ int	main(int ac, char **av, char **env)
 		return (ft_printf("Error\n: not the right amount of args"), 0);
 	if (pipe(tube) == -1)
 		ft_error();
+	
+	data.infile = open(av[1], O_RDONLY);
+	data.outfile = open(av[4], O_WRONLY | O_CREAT | O_TRUNC);
 	pid1 = fork();
 	if (pid1 == -1)
 		ft_error();
@@ -59,8 +56,10 @@ int	main(int ac, char **av, char **env)
 	pid2 = fork();
 	if (pid2 == 0)
 		parent_process(tube, av, env, &data);
-	close(tube[0]);
-	close(tube[1]);
+		
+	// close(tube[0]);
+	// close(tube[1]);
+	close_all(tube, &data);
 	waitpid(pid1, NULL, 0);
 	waitpid(pid2, NULL, 0);
 }

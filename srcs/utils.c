@@ -6,7 +6,7 @@
 /*   By: ymehlil <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 21:28:03 by ymehlil           #+#    #+#             */
-/*   Updated: 2023/02/11 15:36:24 by ymehlil          ###   ########.fr       */
+/*   Updated: 2023/02/11 19:03:36 by ymehlil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	ft_error(void)
 {
 	perror("Error");
-	exit(EXIT_FAILURE);
+	exit(errno);
 }
 
 char	*take_path(char **env)
@@ -47,7 +47,7 @@ char	*find_path(char *cmd, char *env)
 	return (NULL);
 }
 
-void	ft_execute(char *av, char **env)
+void	ft_execute(char *av, char **env, int *tube, t_pipex *data)
 {
 	char	*path;
 	char	**cmd;
@@ -59,7 +59,9 @@ void	ft_execute(char *av, char **env)
 	{
 		if (execve(cmd[0], cmd, env) == -1)
 		{
-			ft_error();
+			ft_putstr_fd("Error : command not found ", 2);
+			ft_putendl_fd(cmd[0], 2);
+			// ft_error();
 		}
 		return ;
 	}
@@ -67,8 +69,12 @@ void	ft_execute(char *av, char **env)
 		path = find_path(cmd[0], path);
 	if (!path)
 	{
+		ft_putstr_fd("Error : command not found ", 2);
+		ft_putendl_fd(cmd[0], 2);
 		ft_free_all(cmd);
-		ft_error();
+		close_all(tube, data);
+		exit(127);
+		// ft_error();
 	}
 	i = execve(path, cmd, env);
 	if (i == -1)
