@@ -6,7 +6,7 @@
 /*   By: ymehlil <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/01 17:00:09 by ymehlil           #+#    #+#             */
-/*   Updated: 2022/11/07 18:19:34 by ymehlil          ###   ########.fr       */
+/*   Updated: 2023/03/14 17:27:30 by ymehlil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,5 @@ void	ft_putstr_fd(char const *s, int fd)
 {
 	if (s == NULL)
 		return ;
-	while (*s)
-		write(fd, s++, 1);
+	write(fd, s, ft_strlen(s));
 }
