@@ -6,7 +6,7 @@
 #    By: ymehlil <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/07 13:44:04 by ymehlil           #+#    #+#              #
-#    Updated: 2022/11/10 18:49:20 by ymehlil          ###   ########.fr        #
+#    Updated: 2023/03/15 18:35:11 by ymehlil          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,7 @@ BONUS			=	ft_lstnew.c ft_lstadd_front.c ft_lstsize.c \
 
 BONUS_OBJS		= $(BONUS:.c=.o)
 
-CC				= gcc
+CC				= cc
 RM				= rm -f
 CFLAGS			= -Wall -Wextra -Werror -I.
 

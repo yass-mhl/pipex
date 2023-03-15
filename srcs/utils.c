@@ -6,7 +6,7 @@
 /*   By: ymehlil <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 21:28:03 by ymehlil           #+#    #+#             */
-/*   Updated: 2023/03/14 19:30:38 by ymehlil          ###   ########.fr       */
+/*   Updated: 2023/03/15 18:33:28 by ymehlil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,9 @@ void	ft_error1(void)
 }
 
 char	*take_path(char **env)
-{	
+{
 	while (*env && ft_strncmp("PATH", *env, 4))
 		env++;
-	// fprintf(stderr, "10 ENV : %s\n", *env);
 	return (*env);
 }
 
@@ -51,42 +50,27 @@ void	ft_execute(char *av, char **env, int *tube, t_pipex *data)
 {
 	char	*path;
 	char	**cmd;
-	int		i;
-	
+
 	path = take_path(env);
 	cmd = ft_split(av, ' ');
+	if (!cmd[0])
+		ft_error3(cmd);
 	if (access(cmd[0], X_OK) == 0)
 	{
 		if (execve(cmd[0], cmd, env) == -1)
-		{	
-			data->error_msg = ft_strjoin("Error : command not found", cmd[0]);
-			// ft_putstr_fd("Error : command not found ", 2);
-			// ft_putendl_fd(cmd[0], 2);
-			ft_putendl_fd(data->error_msg, 2);
-			free(data->error_msg);
-			exit(127);
-			// ft_error1();
-		}
+			ft_error2(data, cmd);
 		return ;
 	}
-	else
-		path = find_path(cmd[0], path);
+	if (!cmd[0])
+		ft_error3(cmd);
+	path = find_path(cmd[0], path);
 	if (!path)
-	{
-		// ft_putstr_fd("Error : command not found ", 2);
-		// ft_putendl_fd(cmd[0], 2);
-		data->error_msg = ft_strjoin("Error : command not found " , cmd[0]);
-		ft_putendl_fd(data->error_msg, 2);
-		free(data->error_msg);
-		ft_free_all(cmd);
-		close_all(tube, data);
-		exit(127);
-	}
-	i = execve(path, cmd, env);
-	if (i == -1)
+		ft_error4(data, cmd, tube);
+	if (execve(path, cmd, env) == -1)
 	{
 		free(path);
 		ft_free_all(cmd);
+		close_all(tube, data);
 		ft_error1();
 	}
 }

@@ -6,7 +6,7 @@
 #    By: ymehlil <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/26 12:49:46 by ymehlil           #+#    #+#              #
-#    Updated: 2023/02/11 18:44:17 by ymehlil          ###   ########.fr        #
+#    Updated: 2023/03/15 13:45:18 by ymehlil          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,7 +28,7 @@ PRINTF_A = ft_printf/libftprintf.a
 
 CC = cc -c -o
 LINKER = cc -o 
-FLAGS = -Wall -Wextra -Werror -g3
+FLAGS = -Wall -Wextra -Werror
 
 all: $(NAME)
 	

@@ -6,7 +6,7 @@
 /*   By: ymehlil <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 12:48:46 by ymehlil           #+#    #+#             */
-/*   Updated: 2023/03/14 17:24:43 by ymehlil          ###   ########.fr       */
+/*   Updated: 2023/03/15 18:29:45 by ymehlil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,22 +15,26 @@
 void	child_process(int *tube, char **av, char **env, t_pipex *data)
 {
 	if (data->infile == -1)
+	{
+		close_all(tube, data);
 		ft_error1();
+	}
 	dup2(tube[1], STDOUT_FILENO);
 	dup2(data->infile, STDIN_FILENO);
-	close(tube[0]);
-	close(tube[1]);
+	close_all(tube, data);
 	ft_execute(av[2], env, tube, data);
 }
 
 void	parent_process(int *tube, char **av, char **env, t_pipex *data)
 {
 	if (data->outfile == -1)
+	{
+		close_all(tube, data);
 		ft_error1();
+	}
 	dup2(tube[0], STDIN_FILENO);
 	dup2(data->outfile, STDOUT_FILENO);
-	close(tube[0]);
-	close(tube[1]);
+	close_all(tube, data);
 	ft_execute(av[3], env, tube, data);
 }
 

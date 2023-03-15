@@ -6,7 +6,7 @@
 #    By: ymehlil <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/13 17:28:16 by ymehlil           #+#    #+#              #
-#    Updated: 2023/01/25 14:38:08 by ymehlil          ###   ########.fr        #
+#    Updated: 2023/03/15 18:35:33 by ymehlil          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@ SRCS	=	ft_itoa.c ft_printf_nb.c ft_printf_str.c ft_printf_utils.c ft_printf.c \
 
 OBJS			= $(SRCS:.c=.o)
 
-CC				= gcc
+CC				= cc
 RM				= rm -f
 CFLAGS			= -Wall -Wextra -Werror -I.
 
